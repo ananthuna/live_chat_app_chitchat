@@ -1,0 +1,22 @@
+.femalebg {
+    /* background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxMBXqUmPKxhTg1I3_gzp6Nuom9tFjq7bOqe3TNgiR&s'); */
+    position: fixed;
+}
+
+.malebg {
+    background: url('https://www.shutterstock.com/image-vector/face-expression-handsome-young-man-260nw-1751161418.jpg');
+}
+
+.menu {
+    /* From https://css.glass */
+    background: rgba(154, 248, 131, 0.336);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.MuiInputLabel-root {
+    color: white !important;
+  }
