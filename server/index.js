@@ -3,7 +3,7 @@ const app = express();
 const path = require('path')
 const http = require('http');
 const { Server } = require('socket.io')
-// const cors = require('cors')
+const cors = require('cors')
 const fs = require('fs');
 const cookieParser = require("cookie-parser");
 const multer = require('multer')
@@ -15,7 +15,7 @@ const port = 3001
 // }
 
 
-// app.use(cors(option))
+app.use(cors())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
