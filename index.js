@@ -14,7 +14,7 @@ const port = 3000;
 //     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
 // }
 
-app.use(cors());
+// app.use(cors(option));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

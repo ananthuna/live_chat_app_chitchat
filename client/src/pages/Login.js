@@ -71,7 +71,7 @@ export default function SignIn({ socket }) {
     }
     if (!loginData.Name) return setMessage('User name required!')
     if (!genter) return setGen(false)
-    console.log(loginData);
+    console.log(baseUrl);
 
     axios.post(`${baseUrl}/login`, loginData, { withCredentials: true }).then((res) => {
       console.log(res.data);

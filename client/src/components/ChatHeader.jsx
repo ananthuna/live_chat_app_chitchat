@@ -7,6 +7,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ChatProfile from '../components/ChatProfile'
 import CloseIcon from '@mui/icons-material/Close';
+import socket from '../socket';
+import { UserContext } from '../Context/Context';
 
 
 
@@ -14,6 +16,8 @@ function ChatHeader({ setMessages }) {
     const [open, setOpen] = useState(false)
     const { chat, setChat } = useContext(ChatContext)
     const [profile, setProfile] = useState(false)
+    const [typingStatus, setTypingStatus] = useState('')
+    const { user } = useContext(UserContext)
 
     const handleLeave = () => {
         setChat('')
@@ -22,9 +26,14 @@ function ChatHeader({ setMessages }) {
         console.log('chathead');
     }
 
+    React.useEffect(() => {
+        socket.on(`type${user.Name}`, (data) => {
+            setTypingStatus(data.type)
+        });
+    });
+
     return (
         <Box position="fixed" zIndex={1000} sx={{
-            // bgcolor: '#17191A',
             backgroundColor: "rgba(43, 42, 42, 0.658)",
             backdropFilter: "blur(5px)",
             width: { xs: '100%', sm: "65%", md: '75%' }
@@ -56,7 +65,7 @@ function ChatHeader({ setMessages }) {
                     }} alt="img" src={chat.imageURL} />}
                     <Box>
                         <Typography sx={{ color: 'white', fontSize: '1.4rem', lineHeight: '25px' }}><b>{chat && chat.Name}</b></Typography>
-                        <Typography sx={{ fontSize: '0.9rem', color: '#808080', lineHeight: '13px' }}  ><b>{chat && 'online'}</b></Typography>
+                        {chat && <Typography sx={{ fontSize: '0.9rem', color: '#808080', lineHeight: '13px', mt: 1 }}  ><b>{typingStatus ? 'typing...' : 'online'}</b></Typography>}
                     </Box>
                 </Box>
                 <Box>
