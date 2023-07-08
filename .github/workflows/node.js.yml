@@ -29,6 +29,7 @@ jobs:
     - run: npm i
     - run: cd client 
     - run: npm i
+    - run: ls
     - run: npm run build
     - run: cd ..
     - run: pm2 stop all
