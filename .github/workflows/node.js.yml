@@ -29,7 +29,7 @@ jobs:
     - run: npm i
     - run: cd client 
     - run: npm i
-    - run: npm run build --if-present
+    - run: npm run build
     - run: cd ..
     - run: pm2 stop all
     - run: pm2 delete all
