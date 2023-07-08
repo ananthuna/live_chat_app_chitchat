@@ -113,7 +113,7 @@ export default function SignIn({ socket }) {
             <Avatar sx={{ m: 1, bgcolor: '#808080' }}>
               <ForumOutlinedIcon />
             </Avatar>
-            <Typography className='animate__zoomIn' sx={{ component: "h1", variant: "h5", color: "white" }}><b>CHIT CHAT</b></Typography>
+            <Typography className='animate__zoomIn' sx={{ component: "h1", variant: "h5", color: "white" }}><b>CHIT CHAT live</b></Typography>
           </Box>
           <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
             <TextField
