@@ -30,3 +30,7 @@ jobs:
     - run: cd client 
     - run: npm i
     - run: npm run build --if-present
+    - run: cd ..
+    - run: pm2 stop index
+    - run: pm2 delete index
+    - run: pm2 start index
