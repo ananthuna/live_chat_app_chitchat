@@ -27,12 +27,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm i
-    - run: ls
-    - run: cd client
-    - run: ls
-    - run: npm i
-    - run: npm run build
-    - run: cd ..
     - run: pm2 stop all
     - run: pm2 delete all
     - run: pm2 start index.js
