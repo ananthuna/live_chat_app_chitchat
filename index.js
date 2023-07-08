@@ -8,13 +8,13 @@ const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
 const port = 3000;
-// const option = {
-//     origin: "http://localhost:3000",
-//     credentials: true,
-//     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
-// }
+const option = {
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+}
 
-// app.use(cors(option));
+app.use(cors(option));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
