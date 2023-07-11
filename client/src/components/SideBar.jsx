@@ -92,11 +92,44 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
 }));
 
+
+
 function SideBar({ setName, setMessages, name }) {
     const [users, setUsers] = useState([])
     const { user } = useContext(UserContext)
     const { setChat } = useContext(ChatContext)
     const [sideMsg, setSideMsg] = useState([{ from: 'Manu', to: 'guppy', message: 'hallo', time: '16:20' }])
+    const [notification, setNotification] = useState({})
+
+    const getMessageNotification = (user, message) => {
+        const from = user !== message.from ? message.from : message.to
+        let messages = notification
+        let lastMessage = messages[from]
+        if (lastMessage?.includes(message)) {
+            return message
+        }
+        if (lastMessage) {
+            // console.log('old');
+            messages[from] = [...lastMessage, message]
+        } else {
+            // console.log('new');
+            messages[from] = [message]
+        }
+        // console.log('messages');
+        setNotification({ ...messages })
+        // console.log({...messages});
+        // const updateUser = users.find({ Name: from })
+        // console.log('updateUser');
+        // setUsers([...users, { ...updateUser, length: messages[from.length], message }])
+    }
+
+
+    // const getLastMessage = (name, messages) => {
+    //     let userMessages = messages[name]
+    //     console.log(userMessages?.pop().message);
+    //     return 'new message'
+    // }
+
 
 
     useEffect(() => {
@@ -104,22 +137,14 @@ function SideBar({ setName, setMessages, name }) {
         socket.on('activeUser', (data) => {
             setUsers([...data])
         })
-
+        console.log('message');
+        console.log(notification);
+        console.log(notification['reema']?.filter((item, index) => notification['reema'].length - 1 === index)[0]);
     })
 
     useEffect(() => {
         socket.on(user.Name, (data) => {
-            const newMsg = sideMsg
-            let index = null
-            if (newMsg.length === 0 && data.from !== user.Name) newMsg.push(data)
-            newMsg.forEach((m, i) => {
-                if (data.from === m.from && data.from !== user.Name) {
-                    index = i
-                }
-            })
-            if (index) newMsg[index] = data
-            if (!index) newMsg.push(data)
-            setSideMsg([...newMsg])
+            getMessageNotification(user.Name, data)
         })
     })
 
@@ -208,11 +233,11 @@ function SideBar({ setName, setMessages, name }) {
                                 }} />
                             </Box>
                         </Box>
-                        {users.map((User) => (
-                            <Box key={User.Name}>
+                        {users.map((User, index) => (
+                            <Box key={index}>
                                 {user.Name !== User.Name && (
                                     <StyledBox
-                                        key={User.Name}
+                                        key={index}
                                         height={70}
                                         sx={{
                                             '&:hover': {
@@ -249,25 +274,27 @@ function SideBar({ setName, setMessages, name }) {
                                                     fontWeight: "400",
                                                     fontSize: '1.2rem'
                                                 }}><b>{User.Name}</b></Typography>
-                                                {sideMsg.map((item) =>
-                                                    item.from === User.Name && <Typography sx={{
+                                                {sideMsg.map((item, i) =>
+                                                    item.from === User.Name && <Typography key={i} sx={{
                                                         color: '#424446',
                                                         ml: { xs: 15, sm: 15 }
                                                     }}>{item.time}</Typography>
 
                                                 )}
                                             </Box>
-                                            {sideMsg.map((item, index) =>
-                                                <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    <Typography key={index} sx={{ fontSize: '0.9rem', color: 'white', fontFamily: 'sans-serif', }}  >{item.from === User.Name? item.message : 'no messages'}</Typography>
-                                                    {item.from === User.Name && <Badge badgeContent={1} color='error'
+                                            {/* {sideMsg.map((item, index) => */}
+                                            {User.Name !== notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0].to &&
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    <Typography key={index} sx={{ fontSize: '0.9rem', color: 'white', fontFamily: 'sans-serif', }}  >{notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0].message}</Typography>
+                                                    <Badge badgeContent={notification[User?.Name]?.length} color='error'
                                                         sx={{
                                                             mr: 1.5,
                                                             mt: 1
-                                                        }} />}
-                                                </Box>
-                                            )}
-                                            {/* {sideMsg.length === 0 && <Typography sx={{ fontSize: '0.9rem', color: '#424446' }}  >{'no new message'}</Typography>} */}
+                                                        }} />
+                                                </Box>}
+                                            {/* // )} */}
+                                            {/* {console.log(User)} */}
+                                            {/* <Typography sx={{ fontSize: '0.9rem', color: '#424446' }}  >{notification['reema']?.filter((item, index) => notification['reema'].length - 1 === index)[0].message}</Typography> */}
                                         </Box>
                                     </StyledBox>
                                 )}
