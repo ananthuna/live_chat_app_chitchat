@@ -215,8 +215,6 @@ function SideBar({ setName, setMessages, name }) {
                                         key={User.Name}
                                         height={70}
                                         sx={{
-                                            width: { xs: "100%", sm: '35%', md: "25%" },
-                                            ml: 1,
                                             '&:hover': {
                                                 backgroundColor: '#272930',
                                             }

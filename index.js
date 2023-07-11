@@ -7,7 +7,7 @@ const cors = require("cors");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
-const port = 3000;
+const port = 3001;
 const option = {
     origin: "http://localhost:3000",
     credentials: true,

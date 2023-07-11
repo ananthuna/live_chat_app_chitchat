@@ -19,14 +19,14 @@ function ChatBody({ messages }) {
   return (
 
     <Box position='relative' zIndex={100} mt='4rem' bgcolor='#17191A'>
-      <Box sx={{ 
-        bgcolor: '#17191A', 
-        width: '100%', 
-        height: '42rem', 
-        position: 'fixed', 
+      <Box sx={{
+        bgcolor: '#17191A',
+        width: '100%',
+        height: '42rem',
+        position: 'fixed',
         zIndex: -100,
-        mt:'-4rem'
-        }}>
+        mt: '-4rem'
+      }}>
 
       </Box>
       <Box>
@@ -47,8 +47,8 @@ function ChatBody({ messages }) {
                         <Typography fontSize='0.9rem' align='right' color='white'><b>You</b></Typography>
                         <Typography fontSize='0.9rem' align='right' color='#808080'>{message.time}</Typography>
                       </Box>
-                      <Box sx={{ bgcolor: "#272930", Width: "50%", p: 2, borderRadius: '1rem 0 1rem 1rem', fontSize: "2rem" }}>
-                        <Typography sx={{ color: 'white', fontSize: '0.9rem', lineHeight: '20px' }}>{message.message}</Typography>
+                      <Box sx={{ bgcolor: "#272930", Width: "50%", p: 2, borderRadius: '1rem 0 1rem 1rem' }}>
+                        <Typography sx={{ color: 'white', fontSize: '0.9rem', lineHeight: '0px' }}>{message.message}</Typography>
                       </Box>
                     </Box>
                     <Avatar sx={{
@@ -73,7 +73,7 @@ function ChatBody({ messages }) {
                         <Typography fontSize='0.9rem' align='right' color='#808080'>{message.time}</Typography>
                       </Box>
                       <Box sx={{ bgcolor: "#272930", Width: "50%", p: 2, borderRadius: '0rem 1rem 1rem 1rem' }}>
-                        <Typography sx={{ color: 'white', fontSize: '0.9rem', lineHeight: '8px' }}>{message.message}</Typography>
+                        <Typography sx={{ color: 'white', fontSize: '0.9rem', lineHeight: '0px' }}>{message.message}</Typography>
                       </Box>
                     </Box>
                   </Box>
