@@ -26,14 +26,11 @@ const theme = createTheme({
 });
 
 
-// { socket }
 function Admin_header({ user }) {
-    // const { imageURL } = useContext(UserContext)
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const [profile, setProfile] = useState(false)
     const [image, setImage] = useState(false)
-    // const { image, setImage } = useContext(UserContext)
 
 
     const Logout = () => {
@@ -41,11 +38,9 @@ function Admin_header({ user }) {
         console.log('logout');
         axios.post(`${baseUrl}/logout`, user, { withCredentials: true }).then((response) => {
 
-            localStorage.clear()
+            localStorage.removeItem('user')
             console.log('out');
-            // if (response.data.logoutGranted) {
             navigate('/')
-            // }
         })
     }
 

@@ -11,7 +11,6 @@ import InputBase from '@mui/material/InputBase';
 import socket from '../socket';
 import './background/bg.css'
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-// import Badge from '@mui/material/Badge';
 
 const StyledBox = styled(Box)({
     display: "flex",
@@ -94,12 +93,11 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 
 
-function SideBar({ setName, setMessages, name }) {
+function SideBar({ setName, setNotification, notification }) {
     const [users, setUsers] = useState([])
     const { user } = useContext(UserContext)
-    const { setChat } = useContext(ChatContext)
-    const [sideMsg, setSideMsg] = useState([{ from: 'Manu', to: 'guppy', message: 'hallo', time: '16:20' }])
-    const [notification, setNotification] = useState({})
+    const { setChat, chat } = useContext(ChatContext)
+
 
     const getMessageNotification = (user, message) => {
         const from = user !== message.from ? message.from : message.to
@@ -109,37 +107,34 @@ function SideBar({ setName, setMessages, name }) {
             return message
         }
         if (lastMessage) {
-            // console.log('old');
             messages[from] = [...lastMessage, message]
         } else {
-            // console.log('new');
             messages[from] = [message]
         }
-        // console.log('messages');
         setNotification({ ...messages })
-        // console.log({...messages});
-        // const updateUser = users.find({ Name: from })
-        // console.log('updateUser');
-        // setUsers([...users, { ...updateUser, length: messages[from.length], message }])
     }
 
 
-    // const getLastMessage = (name, messages) => {
-    //     let userMessages = messages[name]
-    //     console.log(userMessages?.pop().message);
-    //     return 'new message'
-    // }
+    const getSavedMesseges = (user) => {
+        const savedMessages = JSON.parse(localStorage.getItem(user.Name))
+        if (savedMessages) {
+            setNotification({ ...savedMessages })
+        }
+    }
 
+    useEffect(() => {
+        getSavedMesseges(user.Name)
+        window.onbeforeunload = () => {
+            
+            return alert('save')
+        }
+    })
 
 
     useEffect(() => {
-
         socket.on('activeUser', (data) => {
-            setUsers([...data])
+            setUsers([...data.filter(item => item.Name !== user.Name)])
         })
-        console.log('message');
-        console.log(notification);
-        console.log(notification['reema']?.filter((item, index) => notification['reema'].length - 1 === index)[0]);
     })
 
     useEffect(() => {
@@ -148,21 +143,14 @@ function SideBar({ setName, setMessages, name }) {
         })
     })
 
-    useEffect(() => {
-        const array = sideMsg
-        if (name) {
-            array.forEach((m, i) => {
-                if (name === m.from) {
-                    array.splice(i, 1)
-                }
-            })
-            setSideMsg([...array])
-        }
-    }, [name, sideMsg])
 
 
 
+    const handleChat = (User) => {
+        setChat(User)
+        setName(User.Name)
 
+    }
 
 
     return (
@@ -174,7 +162,6 @@ function SideBar({ setName, setMessages, name }) {
                 bgcolor: "#17191A",
                 position: "fixed",
                 mt: -1,
-
             }}>
                 <Box sx={{
                     overflowY: "scroll",
@@ -190,6 +177,7 @@ function SideBar({ setName, setMessages, name }) {
                             flexDirection: 'column',
                             pr: '2.6%'
                         }}>
+                            {/* users search */}
                             <Search sx={{
                                 ml: '0.5rem',
                                 mt: '1rem',
@@ -210,8 +198,8 @@ function SideBar({ setName, setMessages, name }) {
                             <Box sx={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
-
                             }}>
+                                {/* count of users with new message */}
                                 <Box display='flex'>
                                     <Typography variant="h8" sx={{
                                         fontWeight: "500",
@@ -224,8 +212,9 @@ function SideBar({ setName, setMessages, name }) {
                                         fontSize: '1.3rem',
                                         fontFamily: 'sans-serif',
                                         color: '#548EF1'
-                                    }} mt={2} ml={1}><b>({sideMsg.length})</b></Typography>
+                                    }} mt={2} ml={1}><b>({Object.keys(notification).length})</b></Typography>
                                 </Box>
+
                                 <ChatBubbleOutlineIcon sx={{
                                     color: '#484A4C',
                                     mt: '20px',
@@ -233,71 +222,67 @@ function SideBar({ setName, setMessages, name }) {
                                 }} />
                             </Box>
                         </Box>
+
                         {users.map((User, index) => (
                             <Box key={index}>
-                                {user.Name !== User.Name && (
-                                    <StyledBox
-                                        key={index}
-                                        height={70}
-                                        sx={{
-                                            '&:hover': {
-                                                backgroundColor: '#272930',
-                                            }
-                                        }}
-                                        pl={4}
-                                        onClick={() => {
-                                            setChat(User)
-                                            setName(User.Name)
-                                            let sdmsg = sideMsg.find((m) => m.from === User.Name)
-                                            sdmsg && setMessages([sdmsg])
-                                        }}
-                                    >
-                                        <StyledBadge
-                                            overlap="circular"
-                                            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                                            variant="dot"
-                                        >
-                                            <Avatar sx={{
-                                                width: 55,
-                                                height: 55
-                                            }}
-                                                alt="Remy Sharp" src={User.imageURL} />
-                                        </StyledBadge>
-                                        <Box ml={2} >
-                                            <Box sx={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between'
-                                            }}>
-                                                <Typography level='body1' sx={{
-                                                    color: 'white',
-                                                    fontFamily: 'sans-serif',
-                                                    fontWeight: "400",
-                                                    fontSize: '1.2rem'
-                                                }}><b>{User.Name}</b></Typography>
-                                                {sideMsg.map((item, i) =>
-                                                    item.from === User.Name && <Typography key={i} sx={{
-                                                        color: '#424446',
-                                                        ml: { xs: 15, sm: 15 }
-                                                    }}>{item.time}</Typography>
+                                <StyledBox
+                                    key={index}
+                                    height={70}
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor: '#272930',
+                                        }
+                                    }}
+                                    pl={4}
+                                    onClick={() => handleChat(User)}
+                                >
 
-                                                )}
-                                            </Box>
-                                            {/* {sideMsg.map((item, index) => */}
-                                            {User.Name !== notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0].to &&
-                                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    <Typography key={index} sx={{ fontSize: '0.9rem', color: 'white', fontFamily: 'sans-serif', }}  >{notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0].message}</Typography>
-                                                    <Badge badgeContent={notification[User?.Name]?.length} color='error'
-                                                        sx={{
-                                                            mr: 1.5,
-                                                            mt: 1
-                                                        }} />
-                                                </Box>}
-                                            {/* // )} */}
-                                            {/* {console.log(User)} */}
-                                            {/* <Typography sx={{ fontSize: '0.9rem', color: '#424446' }}  >{notification['reema']?.filter((item, index) => notification['reema'].length - 1 === index)[0].message}</Typography> */}
+                                    {/* user dp */}
+                                    <StyledBadge
+                                        overlap="circular"
+                                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                        variant="dot"
+                                    >
+                                        <Avatar sx={{
+                                            width: 55,
+                                            height: 55
+                                        }}
+                                            alt="Remy Sharp" src={User.imageURL} />
+                                    </StyledBadge>
+
+                                    <Box ml={2} >
+                                        {/* user name and last message time */}
+                                        <Box sx={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between'
+                                        }}>
+                                            <Typography level='body1' sx={{
+                                                color: 'white',
+                                                fontFamily: 'sans-serif',
+                                                fontWeight: "400",
+                                                fontSize: '1.2rem'
+                                            }}><b>{User.Name}</b></Typography>
+                                            <Typography sx={{
+                                                color: '#424446',
+                                                ml: { xs: 15, sm: 15 }
+                                            }}>
+                                                {!chat?.Name && notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0]?.time}
+                                            </Typography>
                                         </Box>
-                                    </StyledBox>
-                                )}
+
+                                        {/* new message or last message and total count */}
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Typography key={index} sx={{ fontSize: '0.9rem', color: 'white', fontFamily: 'sans-serif', }}  >
+                                                {notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0]?.message}
+                                            </Typography>
+                                            {!chat?.Name && <Badge badgeContent={notification[User?.Name]?.length} color='error'
+                                                sx={{
+                                                    mr: 1.5,
+                                                    mt: 1
+                                                }} />}
+                                        </Box>
+                                    </Box>
+                                </StyledBox>
                             </Box>
                         ))}
                     </Box>

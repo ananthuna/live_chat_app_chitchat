@@ -11,7 +11,6 @@ function ChatFooter() {
     const [message, setMessage] = useState('');
     const { chat } = useContext(ChatContext)
     const { user } = useContext(UserContext)
-
     const handleSendMessage = (e) => {
         e.preventDefault();
         const date = new Date()
@@ -20,7 +19,6 @@ function ChatFooter() {
         const time = `${H}:${M}`
         socket.emit('typing', { type: '', to: chat.Name })
         if (message.trim() && chat) {
-            console.log('sended');
             socket.emit('private message', {
                 message: message,
                 from: user.Name,
@@ -31,6 +29,7 @@ function ChatFooter() {
         setMessage('');
 
     };
+
     const handleTyping = () => {
         socket.emit('typing', { type: user.Name, to: chat.Name })
     }

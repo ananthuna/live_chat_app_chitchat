@@ -46,6 +46,18 @@ let activeUser = [
     imageURL:
       "https://www.shutterstock.com/image-vector/face-expression-handsome-young-man-260nw-1751161418.jpg",
   },
+  {
+    Name: "Lakshmi",
+    Genter: "male",
+    imageURL:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxMBXqUmPKxhTg1I3_gzp6Nuom9tFjq7bOqe3TNgiR&s",
+  },
+  {
+    Name: "Rose",
+    Genter: "male",
+    imageURL:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxMBXqUmPKxhTg1I3_gzp6Nuom9tFjq7bOqe3TNgiR&s",
+  }
 ];
 let login = false;
 //routers

@@ -1,20 +1,18 @@
 import { Box, Typography, Avatar } from '@mui/material'
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { ChatContext } from '../Context/ChatContext';
 import { UserContext } from '../Context/Context';
 import './background/bg.css'
 
-function ChatBody({ messages }) {
+function ChatBody({  notification }) {
   const { chat } = useContext(ChatContext)
   const { user } = useContext(UserContext)
   const lastMessageRef = useRef(null);
 
-
-  React.useEffect(() => {
+  useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
   });
-
-
+  
 
   return (
 
@@ -34,7 +32,7 @@ function ChatBody({ messages }) {
           <Box>
             <Box sx={{ pb: 8, pt: 3 }}>
               {/* ////// */}
-              {chat ? (messages.map((message, index) =>
+              {chat ? (notification[chat.Name].map((message, index) =>
                 message.from === user.Name ? (
                   message.to === chat.Name && <Box
                     key={index}

@@ -12,18 +12,22 @@ import { UserContext } from '../Context/Context';
 
 
 
-function ChatHeader({ setMessages }) {
+function ChatHeader({ setNotification, notification }) {
     const [open, setOpen] = useState(false)
     const { chat, setChat } = useContext(ChatContext)
     const [profile, setProfile] = useState(false)
     const [typingStatus, setTypingStatus] = useState('')
     const { user } = useContext(UserContext)
 
+    const clearNotification = (userName) => {
+        let messages = notification
+        messages[userName] = []
+        setNotification({ ...messages })
+    }
+
     const handleLeave = () => {
         setChat('')
         setOpen(false)
-        setMessages([])
-        console.log('chathead');
     }
 
     React.useEffect(() => {
@@ -103,7 +107,7 @@ function ChatHeader({ setMessages }) {
                     <Typography textAlign="center">View profile</Typography>
                 </MenuItem>
                 <MenuItem onClick={() => {
-                    setMessages([])
+                    clearNotification(chat?.Name)
                     setOpen(false)
                 }}>
                     <Typography textAlign="center">Clear chat</Typography>
