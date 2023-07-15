@@ -125,7 +125,7 @@ function SideBar({ setName, setNotification, notification }) {
     useEffect(() => {
         getSavedMesseges(user.Name)
         window.onbeforeunload = () => {
-            
+
             return alert('save')
         }
     })
@@ -224,16 +224,16 @@ function SideBar({ setName, setNotification, notification }) {
                         </Box>
 
                         {users.map((User, index) => (
-                            <Box key={index}>
+                            User.Name !== user.Name && <Box key={index}>
                                 <StyledBox
                                     key={index}
                                     height={70}
                                     sx={{
                                         '&:hover': {
                                             backgroundColor: '#272930',
-                                        }
+                                        },
+                                        pl: 4
                                     }}
-                                    pl={4}
                                     onClick={() => handleChat(User)}
                                 >
 
@@ -250,11 +250,19 @@ function SideBar({ setName, setNotification, notification }) {
                                             alt="Remy Sharp" src={User.imageURL} />
                                     </StyledBadge>
 
-                                    <Box ml={2} >
-                                        {/* user name and last message time */}
+                                    <Box sx={{
+                                        ml: 1.5,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        width: '65%',
+                                    }} >
+                                        {/* user name and last message */}
                                         <Box sx={{
                                             display: 'flex',
-                                            justifyContent: 'space-between'
+                                            flexDirection: 'column',
+                                            alignItems: 'start',
+                                            justifyContent: 'start'
                                         }}>
                                             <Typography level='body1' sx={{
                                                 color: 'white',
@@ -262,24 +270,37 @@ function SideBar({ setName, setNotification, notification }) {
                                                 fontWeight: "400",
                                                 fontSize: '1.2rem'
                                             }}><b>{User.Name}</b></Typography>
+
+                                            <Typography key={index} sx={{
+                                                fontSize: '0.9rem',
+                                                color: 'white',
+                                                fontFamily: 'sans-serif',
+                                                maxWidth: '11rem',
+                                                overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap',
+                                            }}  >
+                                                {notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0]?.message}
+                                            </Typography>
+
+                                        </Box>
+
+                                        {/*last message time and total count */}
+                                        <Box sx={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flexDirection: 'column',
+                                            gap: 1.5,
+                                            pb: 1
+                                        }}>
                                             <Typography sx={{
                                                 color: '#424446',
-                                                ml: { xs: 15, sm: 15 }
                                             }}>
                                                 {!chat?.Name && notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0]?.time}
                                             </Typography>
-                                        </Box>
 
-                                        {/* new message or last message and total count */}
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Typography key={index} sx={{ fontSize: '0.9rem', color: 'white', fontFamily: 'sans-serif', }}  >
-                                                {notification[User?.Name]?.filter((item, index) => notification[User.Name].length - 1 === index)[0]?.message}
-                                            </Typography>
-                                            {!chat?.Name && <Badge badgeContent={notification[User?.Name]?.length} color='error'
-                                                sx={{
-                                                    mr: 1.5,
-                                                    mt: 1
-                                                }} />}
+                                            {!chat?.Name && <Badge badgeContent={notification[User?.Name]?.length} color='error' />}
                                         </Box>
                                     </Box>
                                 </StyledBox>
