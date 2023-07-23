@@ -32,7 +32,7 @@ function ChatBody({  notification }) {
           <Box>
             <Box sx={{ pb: 8, pt: 3 }}>
               {/* ////// */}
-              {chat ? (notification[chat.Name].map((message, index) =>
+              {chat ? (notification[chat.Name]?.map((message, index) =>
                 message.from === user.Name ? (
                   message.to === chat.Name && <Box
                     key={index}
