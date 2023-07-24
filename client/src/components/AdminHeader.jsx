@@ -80,7 +80,7 @@ function Admin_header({ user }) {
                                 setOpen(false)
                                 setImage(true)
                             }}
-                            alt="img" src={user.imageURL} />
+                            alt="img" src={baseUrl + '/' + user.imageURL} />
                         {/* user name */}
                         <Box sx={{ pl: '1rem' }}>
                             <Typography level='body1' sx={{

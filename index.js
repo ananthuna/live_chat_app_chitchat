@@ -8,7 +8,9 @@ const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
-const port = 3000;
+const { checkFileType } = require("./controllers/fileCheck");
+const { userImageUpdate } = require("./controllers/userImageUpdate");
+const port = 3001;
 const option = {
   origin: "http://localhost:3000",
   credentials: true,
@@ -34,7 +36,13 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage }).single("file");
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 },
+  fileFilter: (req, file, cb) => {
+    checkFileType(file, cb);
+  },
+});
 
 //socket connection
 const io = new Server(server, { cors: { origin: "*" } });
@@ -44,22 +52,23 @@ let activeUser = [
     Name: "Manu",
     Genter: "male",
     imageURL:
-      "https://www.shutterstock.com/image-vector/face-expression-handsome-young-man-260nw-1751161418.jpg",
+      "public/male.jpeg",
   },
   {
     Name: "Lakshmi",
     Genter: "male",
     imageURL:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxMBXqUmPKxhTg1I3_gzp6Nuom9tFjq7bOqe3TNgiR&s",
+      "public/female2.jpg",
   },
   {
     Name: "Rose",
     Genter: "male",
     imageURL:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxMBXqUmPKxhTg1I3_gzp6Nuom9tFjq7bOqe3TNgiR&s",
-  }
+      "public/female3.jpeg",
+  },
 ];
 let login = false;
+
 //routers
 app.post("/login", async (req, res) => {
   console.log(req.body);
@@ -81,26 +90,30 @@ app.post("/logout", async (req, res) => {
   res.send({ logoutGranted: true });
 });
 
-// app.post('/imageUpdate', async (req, res) => {
-// console.log('image uploading');
+app.post("/imageUpdate", upload.single("file"), (req, res) => {
+  console.log("image uploading");
+  if (req.file) {
+    // console.log(JSON.parse(req.body.user) );
+    const user = userImageUpdate(JSON.parse(req.body.user), req.file.path);
+    res.status(200).send(user);
+  } else {
+    res.status(400).send("Please upload a valid image");
+  }
+  // await upload(req, res, async (err) => {
+  //   if (err) {
+  //     res.sendStatus(500);
+  //   }
+  //   // activeUser.forEach((each, i) => {
+  //   //     if(each.)
+  //   // })
 
-// await upload(req, res, async (err) => {
-// if (err) {
-// res.sendStatus(500);
-// }
-// console.log(req);
-// activeUser.forEach((each, i) => {
-//     if(each.)
-// })
-// res.send({ imageURL: req.file.path });
-
-// if (fs.existsSync(doc.imageUrl)) {
-//     console.log('file exist')
-//     fs.unlinkSync(doc.imageUrl)
-
-// }
-// });
-// })
+  //   if (fs.existsSync(doc.imageUrl)) {
+  //     console.log("file exist");
+  //     fs.unlinkSync(doc.imageUrl);
+  //   }
+  //   res.send({ imageURL: req.file.path });
+  // });
+});
 
 // app.post('/nameUpdate', async (req, res) => {
 //     console.log('/nameUpdate');
@@ -128,17 +141,7 @@ app.post("/logout", async (req, res) => {
 // })
 
 app.get("/chatpage", (req, res) => {
-  console.log("/chatpage");
-  res.sendFile(path.join(__dirname, "build/index.html"), (err) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-  });
-});
-
-app.get("/signup", (req, res) => {
-  console.log("/up");
-  res.sendFile(path.join(__dirname, "build/index.html"), (err) => {
+  res.sendFile(path.join(__dirname, "/client/build/index.html"), (err) => {
     if (err) {
       res.status(500).send(err);
     }
@@ -146,22 +149,8 @@ app.get("/signup", (req, res) => {
 });
 
 //socket connection
-
 io.on("connection", async (socket) => {
   console.log(`⚡: ${socket.id} user just connected!`);
-  //console.log(activeUser.userId);
-
-  // if (login) {
-  //     await collectionActiveUsers.findOne({ userId: activeUser.userId }).then(async (doc) => {
-  //         if (!doc) {
-  //             await collectionActiveUsers.insert(activeUser).then((doc) => {
-
-  //             }).catch((err) => {
-  //                 res.send({ error: err })
-  //             }).then(() => db.close())
-  //         }
-  //     })
-  // }
 
   socket.on("private message", (Data) => {
     const data = { ...Data, id: uuidv4() };
@@ -174,7 +163,6 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("newUser", (data) => {
-    // console.log('newUser');
     if (data) {
       let Data = { ...data, socketID: socket.id };
       const oldUser = activeUser.find((item) => item.Name === data.Name);
@@ -189,7 +177,6 @@ io.on("connection", async (socket) => {
     console.log("🔥: A user disconnected");
     const array = activeUser.filter((item) => item.socketID !== socket.id);
     activeUser = [...array];
-    // await collectionActiveUsers.remove({ userId: activeUser.userId }).then((doc) => {
     socket.disconnect();
   });
 });

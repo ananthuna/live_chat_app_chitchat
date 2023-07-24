@@ -9,7 +9,8 @@ import { UserContext } from '../Context/Context';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import socket from '../socket';
-import './background/bg.css'
+import './background/bg.css';
+import { baseUrl } from '../url';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 const StyledBox = styled(Box)({
@@ -247,7 +248,7 @@ function SideBar({ setName, setNotification, notification }) {
                                             width: 55,
                                             height: 55
                                         }}
-                                            alt="Remy Sharp" src={User.imageURL} />
+                                            alt="Remy Sharp" src={baseUrl + '/' + User.imageURL} />
                                     </StyledBadge>
 
                                     <Box sx={{

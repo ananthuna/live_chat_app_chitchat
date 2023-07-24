@@ -9,6 +9,7 @@ import ChatProfile from '../components/ChatProfile'
 import CloseIcon from '@mui/icons-material/Close';
 import socket from '../socket';
 import { UserContext } from '../Context/Context';
+import { baseUrl } from '../url';
 
 
 
@@ -66,7 +67,7 @@ function ChatHeader({ setNotification, notification }) {
                     {chat && <Avatar sx={{
                         height: 55,
                         width: 55
-                    }} alt="img" src={chat.imageURL} />}
+                    }} alt="img" src={baseUrl + '/' + chat.imageURL} />}
                     <Box>
                         <Typography sx={{ color: 'white', fontSize: '1.4rem', lineHeight: '25px' }}><b>{chat && chat.Name}</b></Typography>
                         {chat && <Typography sx={{ fontSize: '0.9rem', color: '#808080', lineHeight: '13px', mt: 1 }}  ><b>{typingStatus ? 'typing...' : 'online'}</b></Typography>}

@@ -11,7 +11,9 @@ import { UserContext } from '../Context/Context';
 import { useContext } from 'react';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { red } from '@mui/material/colors';
-import './style.css'
+import './style.css';
+import axios from 'axios';
+import { baseUrl } from '../url';
 
 const theme = createTheme({
   breakpoints: {
@@ -26,9 +28,22 @@ const theme = createTheme({
 });
 
 export default function BasicMenu({ user }) {
-  const { nameEdit, setNameEdit } = useContext(UserContext)
+  const { nameEdit, setNameEdit, setUser } = useContext(UserContext)
   const { profilePhoto, setProfilePhoto } = useContext(UserContext)
 
+  const upload = (event) => {
+    // setImages(event.target.files[0]);
+    const data = new FormData();
+    data.append('file', event.target.files[0]);
+    data.append('user', JSON.stringify(user))
+    // console.log(user);
+    axios.post(`${baseUrl}/imageUpdate`, data, { withCredentials: true }).then((doc) => {
+      console.log('imageupdate');
+      console.log(doc.data);
+      setUser(doc.data)
+      localStorage.setItem('user', JSON.stringify(doc.data))
+    })
+  }
 
   const handleDelete = () => {
     // if (window.confirm("Delete your account.")) {
@@ -56,8 +71,15 @@ export default function BasicMenu({ user }) {
         <Badge
           overlap="circular"
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          badgeContent={<Avatar onClick={e => setProfilePhoto(true)} sx={{ width: '4rem', height: '4rem', bgcolor: 'blue' }}><CameraAltIcon /></Avatar>} >
-          <Avatar sx={{ mt: '1.5rem', width: '10rem', height: '10rem' }} src={user.imageURL} />
+          badgeContent={
+            <label >
+              {/* <i class="ion-images"></i> */}
+              <Avatar sx={{ width: '4rem', height: '4rem', bgcolor: 'blue' }}><CameraAltIcon /></Avatar>
+              <input onChange={upload} type="file" id="file" style={{ display: "none" }} name="file" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="" data-original-title="upload photos" />
+            </label>
+
+          } >
+          <Avatar sx={{ mt: '1.5rem', width: '10rem', height: '10rem' }} src={baseUrl + '/' + user.imageURL} />
         </Badge>
 
 
@@ -68,7 +90,7 @@ export default function BasicMenu({ user }) {
             <Typography variant="subtitle2" color="#808080">Name</Typography>
             <Box display="flex" justifyContent="space-between">
               <Typography color="white"><b>{user ? user.Name : 'Name'}</b></Typography>
-              <EditIcon onClick={e => setNameEdit(true)} sx={{color:'#808080'}} />
+              <EditIcon onClick={e => setNameEdit(true)} sx={{ color: '#808080' }} />
             </Box>
             <Typography variant="subtitle2" color="#808080">This is not your username or pin. This name will be visible to your WhatsApp contacts.</Typography>
           </Box>
@@ -76,7 +98,7 @@ export default function BasicMenu({ user }) {
 
         {/* user enail id */}
         <Box sx={{ display: 'flex', ml: { xs: '2rem', sm: '-1.5rem' }, mt: '-5%' }}>
-          <MailIcon pt={1} sx={{color:'white'}} />
+          <MailIcon pt={1} sx={{ color: 'white' }} />
           <Box sx={{ pl: '3%' }}>
             <Typography variant="subtitle2" color="#808080">Email</Typography>
             <Box display="flex" gap="12.2rem">
@@ -88,11 +110,11 @@ export default function BasicMenu({ user }) {
         </Box>
 
         {/* Delete account */}
-        <Box sx={{ display: 'flex',width:'23rem', ml: { xs: '4.1rem', sm: '1.4rem' }, mt: '3%', mr: { xs: '2.5rem', sm: '0.1rem' } }}>
+        <Box sx={{ display: 'flex', width: '23rem', ml: { xs: '4.1rem', sm: '1.4rem' }, mt: '3%', mr: { xs: '2.5rem', sm: '0.1rem' } }}>
           <Box>
-            <Box sx={{ display: "flex", gap:'12rem' }}>
+            <Box sx={{ display: "flex", gap: '12rem' }}>
               <Typography color="red">Delete account </Typography>
-              <DeleteForeverIcon onClick={handleDelete} sx={{ color: red[500] ,ml:5}} />
+              <DeleteForeverIcon onClick={handleDelete} sx={{ color: red[500], ml: 5 }} />
             </Box>
             <Typography variant="subtitle2" color="#808080">Delete your account permanentily.</Typography>
           </Box>

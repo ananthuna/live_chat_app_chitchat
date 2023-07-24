@@ -5,6 +5,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { ChatContext } from '../Context/ChatContext';
 import socket from '../socket';
 import { UserContext } from '../Context/Context';
+import { baseUrl } from '../url';
 
 function ChatFooter() {
 
@@ -49,7 +50,7 @@ function ChatFooter() {
                         width: 35,
                         height: 35,
                     }}
-                        alt="Remy Sharp" src={user.imageURL} />
+                        alt="Remy Sharp" src={baseUrl + '/' + user.imageURL} />
                     <Input sx={{
                         bgcolor: '#272930',
                         width: { xs: '100%', sm: '85%', md: '100%' },

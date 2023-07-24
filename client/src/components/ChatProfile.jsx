@@ -3,7 +3,8 @@ import { Box } from '@mui/system';
 import * as React from 'react';
 import PersonIcon from '@mui/icons-material/Person';
 import MailIcon from '@mui/icons-material/Mail';
-import './style.css'
+import './style.css';
+import { baseUrl } from '../url';
 
 
 export default function BasicMenu({ user }) {
@@ -19,7 +20,7 @@ export default function BasicMenu({ user }) {
 
             }}>
                 <Typography textAlign="center" color='white'>Profile page</Typography>
-                <Avatar sx={{ mt: '1.5rem', width: '10rem', height: '10rem' }} src={user.imageURL} />
+                <Avatar sx={{ mt: '1.5rem', width: '10rem', height: '10rem' }} src={baseUrl + '/' + user.imageURL} />
 
 
                 {/* user Name */}

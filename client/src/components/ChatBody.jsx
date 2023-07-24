@@ -1,8 +1,9 @@
-import { Box, Typography, Avatar } from '@mui/material'
-import React, { useContext, useEffect, useRef } from 'react'
+import { Box, Typography, Avatar } from '@mui/material';
+import React, { useContext, useEffect, useRef } from 'react';
 import { ChatContext } from '../Context/ChatContext';
 import { UserContext } from '../Context/Context';
-import './background/bg.css'
+import './background/bg.css';
+import { baseUrl } from '../url';
 
 function ChatBody({  notification }) {
   const { chat } = useContext(ChatContext)
@@ -52,7 +53,7 @@ function ChatBody({  notification }) {
                     <Avatar sx={{
                       height: 35,
                       width: 35
-                    }} alt="img" src={user.imageURL} />
+                    }} alt="img" src={baseUrl + '/' + user.imageURL} />
                   </Box>
                 ) : (
                   message.from === chat.Name && <Box
@@ -64,7 +65,7 @@ function ChatBody({  notification }) {
                     <Avatar sx={{
                       height: 35,
                       width: 35
-                    }} alt="img" src={chat.imageURL} />
+                    }} alt="img" src={baseUrl + '/' + chat.imageURL} />
                     <Box>
                       <Box display='flex' justifyContent='left' gap={2}>
                         <Typography fontSize='0.9rem' align='right' color='white'><b>{message.from}</b></Typography>
