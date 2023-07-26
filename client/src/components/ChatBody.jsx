@@ -5,7 +5,7 @@ import { UserContext } from '../Context/Context';
 import './background/bg.css';
 import { baseUrl } from '../url';
 
-function ChatBody({  notification }) {
+function ChatBody({ notification }) {
   const { chat } = useContext(ChatContext)
   const { user } = useContext(UserContext)
   const lastMessageRef = useRef(null);
@@ -13,7 +13,7 @@ function ChatBody({  notification }) {
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
   });
-  
+
 
   return (
 
@@ -21,7 +21,7 @@ function ChatBody({  notification }) {
       <Box sx={{
         bgcolor: '#17191A',
         width: '100%',
-        height: '42rem',
+        height: '100%',
         position: 'fixed',
         zIndex: -100,
         mt: '-4rem'
@@ -31,7 +31,7 @@ function ChatBody({  notification }) {
       <Box>
         <Box sx={{ overflowY: "scroll", overflow: 'hidden' }}>
           <Box>
-            <Box sx={{ pb: 8, pt: 3 }}>
+            <Box sx={{ pb: 7, pt: 3 }}>
               {/* ////// */}
               {chat ? (notification[chat.Name]?.map((message, index) =>
                 message.from === user.Name ? (
@@ -43,11 +43,17 @@ function ChatBody({  notification }) {
                     sx={{ p: 2, gap: 2 }}>
                     <Box>
                       <Box display='flex' justifyContent='right' gap={2}>
-                        <Typography fontSize='0.9rem' align='right' color='white'><b>You</b></Typography>
                         <Typography fontSize='0.9rem' align='right' color='#808080'>{message.time}</Typography>
+                        <Typography fontSize='0.9rem' align='right' color='white'><b>You</b></Typography>
                       </Box>
-                      <Box sx={{ bgcolor: "#272930", Width: "50%", p: 2, borderRadius: '1rem 0 1rem 1rem' }}>
-                        <Typography sx={{ color: 'white', fontSize: '0.9rem', lineHeight: '0px' }}>{message.message}</Typography>
+                      <Box sx={{ bgcolor: "#272930", p: 2, borderRadius: '1rem 0 1rem 1rem' }}>
+                        <Typography multiline sx={{
+                          color: 'white',
+                          fontSize: '0.9rem',
+                          maxWidth: '100%',
+                          wordBreak: 'break-word'
+                        }}>
+                          {message.message}</Typography>
                       </Box>
                     </Box>
                     <Avatar sx={{

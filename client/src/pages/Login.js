@@ -90,9 +90,9 @@ export default function SignIn({ socket }) {
             position: "fixed",
             bgcolor: "rgba(43, 42, 42, 0.658)",
             width: "88rem",
-            height: "43rem",
+            height: "100%",
             ml: "-32rem",
-            mt: "-8rem",
+            mt: "-7.5rem",
             zIndex: -100,
             backgroundImage: `url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701416268.jpg')`,
           }}
